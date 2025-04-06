@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Click Counter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+    }
+    #counter {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    button {
+      font-size: 24px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="counter">0</div>
+  <button id="clickButton">Click Me</button>
+
+  <script>
+    const counterEl = document.getElementById('counter');
+    const button = document.getElementById('clickButton');
+
+    // Get saved data
+    let counter = parseInt(localStorage.getItem('dailyCounter')) || 0;
+    const lastClickDate = localStorage.getItem('lastClickDate');
+
+    // Update UI
+    counterEl.textContent = counter;
+
+    // Get today's date as a string (YYYY-MM-DD)
+    const today = new Date().toISOString().split('T')[0];
+
+    // Disable button if already clicked today
+    if (lastClickDate === today) {
+      button.disabled = true;
+      button.textContent = "Come Back Tomorrow!";
+    }
+
+    button.addEventListener('click', () => {
+      const currentDate = new Date().toISOString().split('T')[0];
+
+      if (localStorage.getItem('lastClickDate') !== currentDate) {
+        counter++;
+        localStorage.setItem('dailyCounter', counter);
+        localStorage.setItem('lastClickDate', currentDate);
+        counterEl.textContent = counter;
+        button.disabled = true;
+        button.textContent = "Come Back Tomorrow!";
+      }
+    });
+  </script>
+</body>
+</html>
